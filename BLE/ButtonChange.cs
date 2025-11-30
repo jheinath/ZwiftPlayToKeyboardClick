@@ -2,32 +2,7 @@
 
 public class ButtonChange
 {
-    public bool IsPressed
-    {
-        get; set;
-    }
+    public bool IsPressed { get; init; }
 
-    public ZwiftPlayButton Button
-    {
-        get; set;
-    }
-}
-
-public enum ZwiftPlayButton
-{
-    Up,
-    Down,
-    Left,
-    Right,
-    // Left Steer/Brake
-    LeftShoulder,
-    LeftPower,
-
-    A,
-    B,
-    Y,
-    Z,
-    // Right Steer/Brake
-    RightShoulder,
-    RightPower,
+    public ZwiftPlayButton Button { get; init; }
 }
