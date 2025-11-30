@@ -1,0 +1,67 @@
+﻿using InTheHand.Bluetooth;
+using ZwiftPlayConsoleApp.BLE;
+using ZwiftPlayConsoleApp.Zap;
+
+namespace ZwiftPlayConsoleApp;
+
+public class Program
+{
+    private static readonly Dictionary<string, ZwiftPlayBleManager> BleManagers = new();
+
+    public static void Main(string[] args)
+    {
+        var available = Bluetooth.GetAvailabilityAsync().GetAwaiter().GetResult();
+        if (!available) throw new ArgumentException("Need Bluetooth");
+
+        Bluetooth.AdvertisementReceived += (_, scanResult) =>
+        {
+            // not always getting name... so checking for the manufacturer data.
+            if (!scanResult.ManufacturerData.ContainsKey(ZapConstants.ZWIFT_MANUFACTURER_ID))
+                return;
+
+            if (scanResult.Device?.Id is not null && BleManagers.ContainsKey(scanResult.Device.Id))
+                return;
+            
+
+            var data = scanResult.ManufacturerData[ZapConstants.ZWIFT_MANUFACTURER_ID];
+            var typeByte = data[0];
+
+            if (typeByte != ZapConstants.RC1_LEFT_SIDE && typeByte != ZapConstants.RC1_RIGHT_SIDE)
+                return;
+
+            var device = scanResult.Device;
+            Console.WriteLine("Connecting to " + device!.Id);
+            var clientManager = new ZwiftPlayBleManager(device, typeByte == ZapConstants.RC1_LEFT_SIDE);
+
+            BleManagers[device!.Id] = clientManager;
+
+            clientManager.ConnectAsync();
+        };
+
+        // keep scanning until we find both controllers.
+        Task.Run(async () =>
+        {
+            while (BleManagers.Count < 2)
+            {
+                Console.WriteLine("Start BLE Scan - Connected " + BleManagers.Count + "/2");
+                await Bluetooth.RequestLEScanAsync();
+                await Task.Delay(30000);
+            }
+            Console.WriteLine("BLE Scan - loop done");
+        });
+
+        var run = true;
+        while (run)
+        {
+            var line = Console.ReadLine();
+            if (line == null) continue;
+            
+            var split = line.Split(" ");
+            run = split[0] switch
+            {
+                "q" or "quit" => false,
+                _ => run
+            };
+        }
+    }
+}
