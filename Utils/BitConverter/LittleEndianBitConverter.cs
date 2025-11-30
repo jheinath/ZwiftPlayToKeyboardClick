@@ -23,13 +23,7 @@ public sealed class LittleEndianBitConverter : EndianBitConverter
     /// <summary>
     /// Indicates the byte order ("endianess") in which data is converted using this class.
     /// </summary>
-    public override Endianness Endianness
-    {
-        get
-        {
-            return Endianness.LittleEndian;
-        }
-    }
+    public override Endianness Endianness => Endianness.LittleEndian;
 
     /// <summary>
     /// Copies the specified number of bytes from value to buffer, starting at index.
