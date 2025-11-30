@@ -9,11 +9,11 @@ public abstract class AbstractZapDevice
     public static bool Debug = false;
 
     private readonly LocalKeyProvider _localKeyProvider = new();
-    protected readonly ZapCrypto _zapEncryption;
+    protected readonly ZapCrypto ZapEncryption;
 
     protected AbstractZapDevice()
     {
-        _zapEncryption = new ZapCrypto(_localKeyProvider);
+        ZapEncryption = new ZapCrypto(_localKeyProvider);
     }
 
     public byte[] BuildHandshakeStart()
@@ -64,7 +64,7 @@ public abstract class AbstractZapDevice
 
         Array.Copy(bytes, headerSize, devicePublicKeyBytes, 0, devicePublicKeyBytes.Length);
 
-        _zapEncryption.Initialise(devicePublicKeyBytes);
+        ZapEncryption.Initialise(devicePublicKeyBytes);
 
         if (Debug)
             Console.WriteLine($"Device Public Key - ${Utils.Utils.ByteArrayToStringHex(devicePublicKeyBytes)}");

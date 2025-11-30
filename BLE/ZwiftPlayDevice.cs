@@ -24,7 +24,7 @@ public class ZwiftPlayDevice : AbstractZapDevice
             var tagBytes = new byte[EncryptionUtils.MAC_LENGTH];
             Array.Copy(bytes, EncryptionUtils.MAC_LENGTH + payloadBytes.Length, tagBytes, 0, tagBytes.Length);
 
-            var data = _zapEncryption.Decrypt(counter, payloadBytes, tagBytes);
+            var data = ZapEncryption.Decrypt(counter, payloadBytes, tagBytes);
             
             var type = data[0];
 

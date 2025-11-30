@@ -9,8 +9,6 @@ public class ByteBuffer
     private readonly List<byte> _buffer = new();
     private readonly EndianBitConverter _bitConverter;
 
-    public byte this[int i] => _buffer[i];
-
     public ByteBuffer(byte[]? bytes = null, bool bigEndian = true)
     {
         _bitConverter = bigEndian ? EndianBitConverter.Big : EndianBitConverter.Little;
@@ -33,7 +31,7 @@ public class ByteBuffer
     public void WriteInt32(int v)
     {
         var bytes = _bitConverter.GetBytes(v);
-  _buffer.AddRange(bytes);
+        _buffer.AddRange(bytes);
     }
 
     public void WriteByte(byte v)

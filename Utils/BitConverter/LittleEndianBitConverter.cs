@@ -15,7 +15,7 @@ public sealed class LittleEndianBitConverter : EndianBitConverter
     /// most significant byte is on the right end of a word.
     /// </remarks>
     /// <returns>true if this converter is little-endian, false otherwise.</returns>
-    public sealed override bool IsLittleEndian()
+    public override bool IsLittleEndian()
     {
         return true;
     }
@@ -23,7 +23,7 @@ public sealed class LittleEndianBitConverter : EndianBitConverter
     /// <summary>
     /// Indicates the byte order ("endianess") in which data is converted using this class.
     /// </summary>
-    public sealed override Endianness Endianness
+    public override Endianness Endianness
     {
         get
         {

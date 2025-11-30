@@ -11,16 +11,16 @@ public class LocalKeyProvider
 {
     private readonly SecureRandom _rngCsp = new();
 
-    internal readonly ECDomainParameters _ecParameters;
+    internal readonly ECDomainParameters EcParameters;
     private readonly ECPublicKeyParameters _publicKey;
     private readonly IBasicAgreement _ecdhKeyAgreement;
 
     public LocalKeyProvider()
     {
         var curve = ECNamedCurveTable.GetByName("secp256r1");
-        _ecParameters = new ECDomainParameters(curve.Curve, curve.G, curve.N);
+        EcParameters = new ECDomainParameters(curve.Curve, curve.G, curve.N);
 
-        var keyGeneratorParams = new ECKeyGenerationParameters(_ecParameters, _rngCsp);
+        var keyGeneratorParams = new ECKeyGenerationParameters(EcParameters, _rngCsp);
         var keyGenerator = new ECKeyPairGenerator("ECDH");
         keyGenerator.Init(keyGeneratorParams);
         var keyPair = keyGenerator.GenerateKeyPair();
@@ -53,8 +53,8 @@ public class LocalKeyProvider
         buffer.WriteByte(4);
         buffer.WriteBytes(publicKeyIn);
 
-        var point = _ecParameters.Curve.DecodePoint(buffer.ToArray());
-        var otherPubKey = new ECPublicKeyParameters(point, _ecParameters);
+        var point = EcParameters.Curve.DecodePoint(buffer.ToArray());
+        var otherPubKey = new ECPublicKeyParameters(point, EcParameters);
 
         var secret = _ecdhKeyAgreement.CalculateAgreement(otherPubKey);
         return secret.ToByteArrayUnsigned();

@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography;
-
-namespace ZwiftPlayConsoleApp.Zap.Crypto;
+﻿namespace ZwiftPlayConsoleApp.Zap.Crypto;
 
 public class EncryptionUtils
 {

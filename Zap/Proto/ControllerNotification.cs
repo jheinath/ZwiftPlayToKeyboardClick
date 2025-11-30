@@ -5,27 +5,27 @@ namespace ZwiftPlayConsoleApp.Zap.Proto;
 
 public class ControllerNotification
 {
-    private const int BTN_PRESSED = 0;
+    private const int BtnPressed = 0;
 
-    private const string SHOULDER_NAME = "Shoulder";
-    private const string POWER_NAME = "Power";
-    private const string STEER_NAME = "Steer/Brake";
-    private const string UNKNOWN_NAME = "???";
+    private const string ShoulderName = "Shoulder";
+    private const string PowerName = "Power";
+    private const string SteerName = "Steer/Brake";
+    private const string UnknownName = "???";
 
-    private bool _isRightController = false;
+    private readonly bool _isRightController;
 
-    public bool buttonYPressed = false;// or up on left controller
-    public bool buttonZPressed = false; // or left on left controller
-    public bool buttonAPressed = false;// or right on left controller
-    public bool buttonBPressed = false; // or down on left controller
+    public bool ButtonYPressed;// or up on left controller
+    public bool ButtonZPressed; // or left on left controller
+    public bool ButtonAPressed;// or right on left controller
+    public bool ButtonBPressed; // or down on left controller
 
-    public bool shoulderButtonPressed = false;
-    public bool powerButtonPressed = false;
+    public bool ShoulderButtonPressed;
+    public bool PowerButtonPressed;
 
     // on the left this will be negative when steering and positive when breaking and vice versa on right
-    public int steerBrakeValue = 0;
+    public int SteerBrakeValue;
 
-    public int somethingValue = 0;
+    public int SomethingValue;
 
     public ControllerNotification(byte[] messageBytes)
     {
@@ -48,31 +48,31 @@ public class ControllerNotification
                     switch (number)
                     {
                         case 1:
-                            _isRightController = value == BTN_PRESSED;
+                            _isRightController = value == BtnPressed;
                             break;
                         case 2:
-                            buttonYPressed = value == BTN_PRESSED;
+                            ButtonYPressed = value == BtnPressed;
                             break;
                         case 3:
-                            buttonZPressed = value == BTN_PRESSED;
+                            ButtonZPressed = value == BtnPressed;
                             break;
                         case 4:
-                            buttonAPressed = value == BTN_PRESSED;
+                            ButtonAPressed = value == BtnPressed;
                             break;
                         case 5:
-                            buttonBPressed = value == BTN_PRESSED;
+                            ButtonBPressed = value == BtnPressed;
                             break;
                         case 6:
-                            shoulderButtonPressed = value == BTN_PRESSED;
+                            ShoulderButtonPressed = value == BtnPressed;
                             break;
                         case 7:
-                            powerButtonPressed = value == BTN_PRESSED;
+                            PowerButtonPressed = value == BtnPressed;
                             break;
                         case 8:
-                            steerBrakeValue = ProtoUtils.GetSignedValue((int)value);
+                            SteerBrakeValue = ProtoUtils.GetSignedValue((int)value);
                             break;
                         case 9:
-                            somethingValue = (int)value;
+                            SomethingValue = (int)value;
                             break;
 
                         default:
@@ -89,14 +89,14 @@ public class ControllerNotification
     public string Diff(ControllerNotification previousNotification)
     {
         var diff = "";
-        diff += Diff(NameY(), buttonYPressed, previousNotification.buttonYPressed);
-        diff += Diff(NameZ(), buttonZPressed, previousNotification.buttonZPressed);
-        diff += Diff(NameA(), buttonAPressed, previousNotification.buttonAPressed);
-        diff += Diff(NameB(), buttonBPressed, previousNotification.buttonBPressed);
-        diff += Diff(SHOULDER_NAME, shoulderButtonPressed, previousNotification.shoulderButtonPressed);
-        diff += Diff(POWER_NAME, powerButtonPressed, previousNotification.powerButtonPressed);
-        diff += Diff(STEER_NAME, steerBrakeValue, previousNotification.steerBrakeValue);
-        diff += Diff(UNKNOWN_NAME, somethingValue, previousNotification.somethingValue);
+        diff += Diff(NameY(), ButtonYPressed, previousNotification.ButtonYPressed);
+        diff += Diff(NameZ(), ButtonZPressed, previousNotification.ButtonZPressed);
+        diff += Diff(NameA(), ButtonAPressed, previousNotification.ButtonAPressed);
+        diff += Diff(NameB(), ButtonBPressed, previousNotification.ButtonBPressed);
+        diff += Diff(ShoulderName, ShoulderButtonPressed, previousNotification.ShoulderButtonPressed);
+        diff += Diff(PowerName, PowerButtonPressed, previousNotification.PowerButtonPressed);
+        diff += Diff(SteerName, SteerBrakeValue, previousNotification.SteerBrakeValue);
+        diff += Diff(UnknownName, SomethingValue, previousNotification.SomethingValue);
         return diff;
     }
 
@@ -130,17 +130,17 @@ public class ControllerNotification
 
         text += $"{NameController()} ";
 
-        text += buttonYPressed ? NameY() : "";
-        text += buttonZPressed ? NameZ() : "";
-        text += buttonAPressed ? NameA() : "";
-        text += buttonBPressed ? NameB() : "";
+        text += ButtonYPressed ? NameY() : "";
+        text += ButtonZPressed ? NameZ() : "";
+        text += ButtonAPressed ? NameA() : "";
+        text += ButtonBPressed ? NameB() : "";
 
-        text += shoulderButtonPressed ? SHOULDER_NAME : "";
-        text += powerButtonPressed ? POWER_NAME : "";
+        text += ShoulderButtonPressed ? ShoulderName : "";
+        text += PowerButtonPressed ? PowerName : "";
 
-        text += steerBrakeValue != 0 ? $"{STEER_NAME}: {steerBrakeValue}" : "";
+        text += SteerBrakeValue != 0 ? $"{SteerName}: {SteerBrakeValue}" : "";
 
-        text += somethingValue != 0 ? $"{UNKNOWN_NAME}: {somethingValue}" : "";
+        text += SomethingValue != 0 ? $"{UnknownName}: {SomethingValue}" : "";
 
         text += ")";
         return text;
@@ -149,12 +149,12 @@ public class ControllerNotification
     public ButtonChange[] DiffChange(ControllerNotification? previousNotification)
     {
         var diffList = new List<ButtonChange>();
-        DiffChange(diffList, _isRightController ? ZwiftPlayButton.Y : ZwiftPlayButton.Up, buttonYPressed, previousNotification?.buttonYPressed ?? false);
-        DiffChange(diffList, _isRightController ? ZwiftPlayButton.Z : ZwiftPlayButton.Left, buttonZPressed, previousNotification?.buttonZPressed ?? false);
-        DiffChange(diffList, _isRightController ? ZwiftPlayButton.A : ZwiftPlayButton.Right, buttonAPressed, previousNotification?.buttonAPressed ?? false);
-        DiffChange(diffList, _isRightController ? ZwiftPlayButton.B : ZwiftPlayButton.Down, buttonBPressed, previousNotification?.buttonBPressed ?? false);
-        DiffChange(diffList, _isRightController ? ZwiftPlayButton.RightShoulder : ZwiftPlayButton.LeftShoulder, shoulderButtonPressed, previousNotification?.shoulderButtonPressed ?? false);
-        DiffChange(diffList, _isRightController ? ZwiftPlayButton.RightPower: ZwiftPlayButton.LeftPower, powerButtonPressed, previousNotification?.powerButtonPressed ?? false);
+        DiffChange(diffList, _isRightController ? ZwiftPlayButton.Y : ZwiftPlayButton.Up, ButtonYPressed, previousNotification?.ButtonYPressed ?? false);
+        DiffChange(diffList, _isRightController ? ZwiftPlayButton.Z : ZwiftPlayButton.Left, ButtonZPressed, previousNotification?.ButtonZPressed ?? false);
+        DiffChange(diffList, _isRightController ? ZwiftPlayButton.A : ZwiftPlayButton.Right, ButtonAPressed, previousNotification?.ButtonAPressed ?? false);
+        DiffChange(diffList, _isRightController ? ZwiftPlayButton.B : ZwiftPlayButton.Down, ButtonBPressed, previousNotification?.ButtonBPressed ?? false);
+        DiffChange(diffList, _isRightController ? ZwiftPlayButton.RightShoulder : ZwiftPlayButton.LeftShoulder, ShoulderButtonPressed, previousNotification?.ShoulderButtonPressed ?? false);
+        DiffChange(diffList, _isRightController ? ZwiftPlayButton.RightPower: ZwiftPlayButton.LeftPower, PowerButtonPressed, previousNotification?.PowerButtonPressed ?? false);
         //diff += Diff(STEER_NAME, steerBrakeValue, previousNotification.steerBrakeValue);
         //diff += Diff(UNKNOWN_NAME, somethingValue, previousNotification.somethingValue);
         return diffList.ToArray();
@@ -164,7 +164,7 @@ public class ControllerNotification
     {
         if (pressedValue != oldPressedValue)
         {
-            changes.Add(new ButtonChange(){ Button = button, IsPressed = pressedValue });
+            changes.Add(new ButtonChange { Button = button, IsPressed = pressedValue });
         }
     }
 
