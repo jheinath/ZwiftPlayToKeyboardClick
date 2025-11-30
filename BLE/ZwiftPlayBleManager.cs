@@ -8,19 +8,17 @@ public class ZwiftPlayBleManager
     private readonly ZwiftPlayDevice _zapDevice = new();
 
     private readonly BluetoothDevice _device;
-    private readonly bool _isLeft;
 
-    private static GattCharacteristic _asyncCharacteristic;
-    private static GattCharacteristic _syncRxCharacteristic;
-    private static GattCharacteristic _syncTxCharacteristic;
+    private static GattCharacteristic _asyncCharacteristic = null!;
+    private static GattCharacteristic _syncRxCharacteristic = null!;
+    private static GattCharacteristic _syncTxCharacteristic = null!;
 
-    public ZwiftPlayBleManager(BluetoothDevice device, bool isLeft)
+    public ZwiftPlayBleManager(BluetoothDevice device)
     {
         _device = device;
-        _isLeft = isLeft;
     }
 
-    public async void ConnectAsync()
+    public async Task ConnectAsync()
     {
         var gatt = _device.Gatt;
         await gatt.ConnectAsync();
@@ -29,7 +27,6 @@ public class ZwiftPlayBleManager
         {
             Console.WriteLine("Connected");
 
-            //var services = gatt.GetPrimaryServicesAsync().GetAwaiter().GetResult();
             await RegisterCharacteristics(gatt);
 
             Console.WriteLine("Send Start");

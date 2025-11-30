@@ -14,8 +14,6 @@ public class ZwiftPlayDevice : AbstractZapDevice
     {
         try
         {
-            //if (LOG_RAW) Timber.d("Decrypted: ${bytes.toHexString()}")
-
             var counterBytes = new byte[4];
             Array.Copy(bytes, 0, counterBytes, 0, counterBytes.Length);
             var counter = new ByteBuffer(counterBytes).ReadInt32();
@@ -71,21 +69,6 @@ public class ZwiftPlayDevice : AbstractZapDevice
             foreach (var change in changes)
             {
                 KeyboardKeys.ProcessZwiftPlay(change);
-            }
-        }
-        else
-        {
-            if (_lastButtonState == null)
-            {
-                Console.WriteLine(notification.ToString());
-            }
-            else
-            {
-                var diff = notification.Diff(_lastButtonState);
-                if (!string.IsNullOrEmpty(diff)) // get repeats of the same state
-                {
-                    Console.WriteLine(diff);
-                }
             }
         }
 
