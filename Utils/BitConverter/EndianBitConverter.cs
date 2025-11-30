@@ -29,7 +29,7 @@ public abstract class EndianBitConverter
     #endregion
 
     #region Factory properties
-    static LittleEndianBitConverter little = new LittleEndianBitConverter();
+    static LittleEndianBitConverter little = new();
     /// <summary>
     /// Returns a little-endian bit converter instance. The same instance is
     /// always returned.
@@ -42,7 +42,7 @@ public abstract class EndianBitConverter
         }
     }
 
-    static BigEndianBitConverter big = new BigEndianBitConverter();
+    static BigEndianBitConverter big = new();
     /// <summary>
     /// Returns a big-endian bit converter instance. The same instance is
     /// always returned.
