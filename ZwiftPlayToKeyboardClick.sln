@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFolder", "SolutionFolder", "{46E111D3-3B21-45EA-BB2E-1D4A049D6616}"
 	ProjectSection(SolutionItems) = preProject
 		.run\Publish console app to folder.run.xml = .run\Publish console app to folder.run.xml
+		.gitignore = .gitignore
 	EndProjectSection
 EndProject
 Global
