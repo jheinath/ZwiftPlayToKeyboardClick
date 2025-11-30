@@ -5,6 +5,11 @@ VisualStudioVersion = 17.8.34316.72
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZwiftPlayToKeyboardClick", "ZwiftPlayToKeyboardClick.csproj", "{D7C468F9-F7CC-4694-BF3D-57B1CC4B62BC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFolder", "SolutionFolder", "{46E111D3-3B21-45EA-BB2E-1D4A049D6616}"
+	ProjectSection(SolutionItems) = preProject
+		.run\Publish console app to folder.run.xml = .run\Publish console app to folder.run.xml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
