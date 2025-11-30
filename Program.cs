@@ -31,7 +31,7 @@ public class Program
 
             var device = scanResult.Device;
             Console.WriteLine("Connecting to " + device!.Id);
-            var clientManager = new ZwiftPlayBleManager(device, typeByte == ZapConstants.RC1_LEFT_SIDE);
+            var clientManager = new ZwiftPlayBleManager(device);
 
             BleManagers[device!.Id] = clientManager;
 
