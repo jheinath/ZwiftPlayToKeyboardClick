@@ -6,7 +6,7 @@ namespace ZwiftPlayConsoleApp.BLE;
 
 public abstract class AbstractZapDevice
 {
-    public static bool Debug = false;
+    protected const bool Debug = false;
 
     private readonly LocalKeyProvider _localKeyProvider = new();
     protected readonly ZapCrypto ZapEncryption;
@@ -30,7 +30,6 @@ public abstract class AbstractZapDevice
         if (Debug)
             Console.WriteLine($"{characteristicName} {Utils.Utils.ByteArrayToStringHex(bytes)}");
 
-        // todo make better like below kotlin
         if (bytes[0] == ZapConstants.RIDE_ON[0] && bytes[1] == ZapConstants.RIDE_ON[1] && bytes[2] == ZapConstants.RIDE_ON[2] && bytes[3] == ZapConstants.RIDE_ON[3])
         {
             ProcessDevicePublicKeyResponse(bytes);

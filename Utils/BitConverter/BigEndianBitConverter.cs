@@ -38,7 +38,7 @@ public sealed class BigEndianBitConverter : EndianBitConverter
         for (var i = 0; i < bytes; i++)
         {
             buffer[endOffset - i] = unchecked((byte)(value & 0xff));
-            value = value >> 8;
+            value >>= 8;
         }
     }
 
